@@ -21,17 +21,21 @@ POPULATION_PER_YEAR = {
 }
 
 st.markdown("""
-Καλώς ήρθες! Ανέβασε το αρχείο σου (σε μορφή CSV) για να δούμε την κατανάλωση. 
+Καλώς ήρθες! Ανέβασε το αρχείο σου (σε μορφή **CSV ή Excel**) για να δούμε την κατανάλωση. 
 *Βεβαιώσου ότι το αρχείο σου έχει στήλες για: Μήνα/Έτος, Εμπορική Ονομασία, Δραστική, mg ανά συσκευασία, Τεμάχια Πωλήσεων και το DDD WHO.*
 """)
 
-# --- 3. Φόρτωση Αρχείου ---
-uploaded_file = st.file_uploader("Ανέβασε το αρχείο CSV εδώ", type=['csv'])
+# --- 3. Φόρτωση Αρχείου (Υποστηρίζει πλέον CSV και XLSX) ---
+uploaded_file = st.file_uploader("Ανέβασε το αρχείο σου (CSV ή Excel) εδώ", type=['csv', 'xlsx'])
 
 if uploaded_file is not None:
     try:
-        # Διαβάζουμε το αρχείο
-        df = pd.read_csv(uploaded_file)
+        # Διαβάζουμε το αρχείο ανάλογα με τον τύπο του
+        if uploaded_file.name.endswith('.csv'):
+            df = pd.read_csv(uploaded_file)
+        elif uploaded_file.name.endswith('.xlsx'):
+            df = pd.read_excel(uploaded_file)
+            
         st.success("Το αρχείο ανέβηκε και διαβάστηκε επιτυχώς!")
         
         with st.expander("👀 Δες τα πρώτα δεδομένα του αρχείου σου (Προεπισκόπηση)"):
